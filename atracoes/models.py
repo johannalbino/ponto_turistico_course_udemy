@@ -10,5 +10,8 @@ class Atracoes(models.Model):
     idade_minima = models.IntegerField()
     photo = models.ImageField(upload_to='atracoes', null=True, blank=True)
 
+    class Meta:
+        managed = True
+
     def __str__(self):
         return self.name
