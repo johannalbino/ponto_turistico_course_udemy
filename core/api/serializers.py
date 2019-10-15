@@ -40,8 +40,6 @@ class PontoTuristicosSerializer(serializers.ModelSerializer):
 
         _data_one = []
 
-        validated_data = args[0]
-
         for one_to_one in _field_one_to_one:
             _data_one.append(args[0][one_to_one])
             del args[0][one_to_one]
@@ -59,8 +57,12 @@ class PontoTuristicosSerializer(serializers.ModelSerializer):
                 rel_list = list(rel)
                 if rel[2] is None:
                     _relation_data = rel_list[0].objects.create()
-                    rel_list[1] = _relation_data
+                    if rel[3] == 'endereco':
+                        ponto.endereco = _relation_data
 
+                    elif rel[3] == 'doc_identificacao':
+                        ponto.doc_identificacao = _relation_data
+                    ponto.save()
                 else:
                     _field = rel[2]
                     _relation_data = rel_list[0].objects.create(**_field)
@@ -100,5 +102,7 @@ class PontoTuristicosSerializer(serializers.ModelSerializer):
 
         self.create_relations_many_to_many(ponto, _data_many)
         return ponto
+
+
 
 
