@@ -10,7 +10,7 @@ class Comentarios(models.Model):
     aprovado = models.BooleanField(default=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'comentarios'
 
     def __str__(self):

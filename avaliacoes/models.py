@@ -10,7 +10,7 @@ class Avaliacoes(models.Model):
     data = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'avaliacoes'
 
     def __str__(self):

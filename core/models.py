@@ -10,6 +10,9 @@ from enderecos.models import Endereco
 class DocIdentificacao(models.Model):
     description = models.CharField(max_length=100)
 
+    class Meta:
+        managed = True
+
 
 class PontoTuristicos(models.Model):
     name = models.CharField(max_length=150)
@@ -23,7 +26,7 @@ class PontoTuristicos(models.Model):
     doc_identificacao = models.OneToOneField(DocIdentificacao, on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'pontos_turisticos'
 
     def __str__(self):

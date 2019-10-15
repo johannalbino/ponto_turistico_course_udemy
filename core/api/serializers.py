@@ -17,7 +17,7 @@ class PontoTuristicosSerializer(serializers.ModelSerializer):
     comentarios = ComentarioSerializer(many=True)
     avaliacoes = AvaliacaoSerializer(many=True)
     endereco = EnderecoSerializer(many=False)
-    doc_identificacao = DocIdentificacao()
+    doc_identificacao = DocIdentificacaoSerializer(many=False)
 
 
     class Meta:
@@ -36,17 +36,43 @@ class PontoTuristicosSerializer(serializers.ModelSerializer):
                 at = rel[0].objects.create(**rel[2][0])
                 rel[1].add(at)
 
-    def create_relations_one_to_one(self, ponto, *args, **kwargs):
-        models = [Endereco]
-        campos_pk = [ponto.endereco]
+    def create_relations_one_to_one(self, _field_one_to_one, *args, **kwargs):
 
-        relations = list(zip(models, campos_pk, args[0]))
+        _data_one = []
+
+        validated_data = args[0]
+
+        for one_to_one in _field_one_to_one:
+            _data_one.append(args[0][one_to_one])
+            del args[0][one_to_one]
+
+        ponto = PontoTuristicos
+
+        models = [Endereco, DocIdentificacao]
+        campos_pk = [ponto.endereco, ponto.doc_identificacao]
+
+        relations = list(zip(models, campos_pk, _data_one,_field_one_to_one))
+        ponto = PontoTuristicos.objects.create(**args[0])
 
         if args.__len__() > 0:
             for rel in relations:
-                at = rel[0].objects.create(**rel[2])
-                rel[1] = at
-                ponto.save()
+                rel_list = list(rel)
+                if rel[2] is None:
+                    _relation_data = rel_list[0].objects.create()
+                    rel_list[1] = _relation_data
+
+                else:
+                    _field = rel[2]
+                    _relation_data = rel_list[0].objects.create(**_field)
+
+                    if rel[3] == 'endereco':
+                        ponto.endereco = _relation_data
+
+                    elif rel[3] == 'doc_identificacao':
+                        ponto.doc_identificacao = _relation_data
+                    ponto.save()
+
+            return ponto
 
     def create(self, validated_data):
 
@@ -63,13 +89,7 @@ class PontoTuristicosSerializer(serializers.ModelSerializer):
             del validated_data[many_to_many]
 
         if _field_one_to_one.__len__() > 1:
-            for one_to_one in _field_one_to_one:
-                _data_one.append(validated_data[one_to_one])
-                del validated_data[one_to_one]
-
-            ponto = PontoTuristicos.objects.create(**validated_data)
-            self.create_relations_one_to_one(ponto, _data_one)
-            ponto.save()
+            ponto = self.create_relations_one_to_one(_field_one_to_one, validated_data)
         else:
             endereco = validated_data[str(_field_one_to_one[0])]
             del validated_data[str(_field_one_to_one[0])]

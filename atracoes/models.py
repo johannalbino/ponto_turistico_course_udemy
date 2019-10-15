@@ -11,7 +11,7 @@ class Atracoes(models.Model):
     photo = models.ImageField(upload_to='atracoes', null=True, blank=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'atracoes'
 
     def __str__(self):

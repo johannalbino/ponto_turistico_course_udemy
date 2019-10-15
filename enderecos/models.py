@@ -13,7 +13,7 @@ class Endereco(models.Model):
     longitude = models.IntegerField(null=True, blank=True)
 
     class Meta:
-        managed = False
+        managed = True
         db_table = 'enderecos'
 
     def __str__(self):
