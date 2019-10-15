@@ -84,9 +84,11 @@ WSGI_APPLICATION = 'pontos_turisticos.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
+default_dburl = 'sqlite:///' + os.path.join(BASE_DIR, 'db.slite3')
+
 DATABASES = {
     'default':
-        config('DATABASE_URL', default=default_dburl, cast=dburl),
+        config('DATABASE_URL', default=default_dburl, cast=dburl)
 }
 
 
