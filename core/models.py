@@ -7,6 +7,10 @@ from enderecos.models import Endereco
 # Create your models here.
 
 
+class DocIdentificacao(models.Model):
+    description = models.CharField(max_length=100)
+
+
 class PontoTuristicos(models.Model):
     name = models.CharField(max_length=150)
     description = models.TextField()
@@ -16,6 +20,11 @@ class PontoTuristicos(models.Model):
     avaliacoes = models.ManyToManyField(Avaliacoes)
     endereco = models.ForeignKey(Endereco, on_delete=models.CASCADE, null=True, blank=True)
     photo = models.ImageField(upload_to='pontos_turisticos', null=True, blank=True)
+    doc_identificacao = models.OneToOneField(DocIdentificacao, on_delete=models.CASCADE, null=True, blank=True)
+
+    class Meta:
+        managed = False
+        db_table = 'pontos_turisticos'
 
     def __str__(self):
         return self.name

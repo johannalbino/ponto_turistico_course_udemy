@@ -1,9 +1,15 @@
 from rest_framework import serializers
-from core.models import PontoTuristicos, Atracoes, Comentarios, Endereco, Avaliacoes
+from core.models import PontoTuristicos, Atracoes, Comentarios, Endereco, Avaliacoes, DocIdentificacao
 from atracoes.api.serializers import AtracaoSerializer
 from comentarios.api.serializers import ComentarioSerializer
 from avaliacoes.api.serializers import AvaliacaoSerializer
 from enderecos.api.serializers import EnderecoSerializer
+
+
+class DocIdentificacaoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DocIdentificacao
+        fields = '__all__'
 
 
 class PontoTuristicosSerializer(serializers.ModelSerializer):
@@ -11,11 +17,12 @@ class PontoTuristicosSerializer(serializers.ModelSerializer):
     comentarios = ComentarioSerializer(many=True)
     avaliacoes = AvaliacaoSerializer(many=True)
     endereco = EnderecoSerializer(many=False)
+    doc_identificacao = DocIdentificacao()
 
 
     class Meta:
         model = PontoTuristicos
-        fields = ('id', 'name', 'description', 'aprovado', 'photo', 'atracoes', 'comentarios', 'avaliacoes', 'endereco')
+        fields = ('id', 'name', 'description', 'aprovado', 'photo', 'atracoes', 'comentarios', 'avaliacoes', 'endereco', 'doc_identificacao')
         read_only_fields = ('comentarios', 'avaliacoes', 'endereco')
 
     def create_relations_many_to_many(self, ponto, *args, **kwargs):
@@ -44,7 +51,7 @@ class PontoTuristicosSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
 
         _field_many_to_many = ['atracoes', 'comentarios', 'avaliacoes']
-        _field_one_to_one = ['endereco']
+        _field_one_to_one = ['endereco', 'doc_identificacao']
 
         ponto = PontoTuristicos
 
