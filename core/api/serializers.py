@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.models import PontoTuristicos, Atracoes, Comentarios, Endereco, Avaliacoes, DocIdentificacao
+from core.models import PontoTuristicos, Atracoes, Comentarios, Endereco, Avaliacoes, DocIdentificacao, TypeTest
 from atracoes.api.serializers import AtracaoSerializer
 from comentarios.api.serializers import ComentarioSerializer
 from avaliacoes.api.serializers import AvaliacaoSerializer
@@ -18,11 +18,17 @@ class PontoTuristicosSerializer(serializers.ModelSerializer):
     avaliacoes = AvaliacaoSerializer(many=True)
     endereco = EnderecoSerializer(many=False)
     doc_identificacao = DocIdentificacaoSerializer(many=False)
+    type1 = serializers.PrimaryKeyRelatedField(
+        queryset=TypeTest.objects.filter(type='Luis').distinct()
+    )
+    type2 = serializers.PrimaryKeyRelatedField(
+        queryset=TypeTest.objects.filter(type='Jose').distinct()
+    )
 
 
     class Meta:
         model = PontoTuristicos
-        fields = ('id', 'name', 'description', 'aprovado', 'photo', 'atracoes', 'comentarios', 'avaliacoes', 'endereco', 'doc_identificacao')
+        fields = ('id', 'name', 'description', 'aprovado', 'photo', 'atracoes', 'type1', 'type2', 'comentarios', 'avaliacoes', 'endereco', 'doc_identificacao')
         read_only_fields = ('comentarios', 'avaliacoes', 'endereco')
 
     def create_relations_many_to_many(self, ponto, *args, **kwargs):

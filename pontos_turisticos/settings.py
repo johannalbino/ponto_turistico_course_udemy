@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'avaliacoes',
     'enderecos',
     'django_filters',
+    'type_test',
     'rest_framework.authtoken',
 ]
 

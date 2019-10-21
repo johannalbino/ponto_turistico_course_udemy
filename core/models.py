@@ -3,6 +3,7 @@ from atracoes.models import Atracoes
 from comentarios.models import Comentarios
 from avaliacoes.models import Avaliacoes
 from enderecos.models import Endereco
+from type_test.models import TypeTest
 
 # Create your models here.
 
@@ -19,6 +20,8 @@ class PontoTuristicos(models.Model):
     description = models.TextField()
     aprovado = models.BooleanField(default=False)
     atracoes = models.ManyToManyField(Atracoes)
+    type1 = models.ForeignKey(TypeTest, related_name='type1', on_delete=models.PROTECT, null=True, blank=True)
+    type2 = models.ForeignKey(TypeTest, related_name='type2', on_delete=models.PROTECT, null=True, blank=True)
     comentarios = models.ManyToManyField(Comentarios)
     avaliacoes = models.ManyToManyField(Avaliacoes)
     endereco = models.ForeignKey(Endereco, on_delete=models.CASCADE, null=True, blank=True)

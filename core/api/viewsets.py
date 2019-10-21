@@ -1,3 +1,4 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
@@ -14,8 +15,8 @@ class PontoTuristicoViewSet(viewsets.ModelViewSet):
     """
     queryset = PontoTuristicos.objects.all()
     serializer_class = PontoTuristicosSerializer
-    filter_backends = [SearchFilter]
-    filter_fields = ['id', 'name', 'description', 'endereco__linha1']
+    filter_backends = (DjangoFilterBackend, )
+    #filter_fields = ['id', 'name', 'description', 'endereco__linha1']
     #permission_classes = [IsAuthenticated]
     #authentication_classes = [TokenAuthentication, ]
 
